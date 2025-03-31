@@ -1,0 +1,32 @@
+-- Database schema for Commerce Bank project
+
+-- Users table
+CREATE TABLE IF NOT EXISTS users (
+  id SERIAL PRIMARY KEY,
+  email VARCHAR(255) NOT NULL UNIQUE,
+  password_hash VARCHAR(255) NOT NULL,
+  first_name VARCHAR(100) NOT NULL,
+  last_name VARCHAR(100) NOT NULL,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Accounts table
+CREATE TABLE IF NOT EXISTS accounts (
+  id SERIAL PRIMARY KEY,
+  user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+  account_number VARCHAR(20) NOT NULL UNIQUE,
+  account_type VARCHAR(50) NOT NULL,
+  balance DECIMAL(12, 2) NOT NULL DEFAULT 0.0,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Transactions table
+CREATE TABLE IF NOT EXISTS transactions (
+  id SERIAL PRIMARY KEY,
+  account_id INTEGER REFERENCES accounts(id) ON DELETE CASCADE,
+  transaction_type VARCHAR(20) NOT NULL,
+  amount DECIMAL(12, 2) NOT NULL,
+  description TEXT,
+  transaction_date TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
